@@ -43,7 +43,7 @@ README principal du repo listant tous les mods publiés, organisé par catégori
 _Avoid_: index, liste, inventaire
 
 **README mod template**:
-Sections dans l'ordre : titre (`# mod name`), première image de `media/` si elle existe (insérée par le CI entre le titre et `## Description`), `## Description`, `## Installation` (avec chemin générique), `## Usage`, `## Screenshots / Videos`. Généré automatiquement à la création du dossier mod.
+Sections dans l'ordre : titre (`# mod name`), première image de `media/` si elle existe (insérée par le CI entre le titre et `## Description`), `## Description`, `## Installation` (avec chemin générique), `## Usage`, `## Screenshots / Videos`. Si `media/` contient plusieurs images, les images supplémentaires (2ème et suivantes) sont listées dans `## Screenshots / Videos` (une par ligne, Markdown pur), suivies du placeholder vidéo. Généré automatiquement à la création du dossier mod.
 
 **Chemin d'installation générique**:
 `..\Saved Games\DCS.openbeta\Mods\tech\[nom_du_mod]` — chemin de référence communiqué aux utilisateurs, à adapter selon leur configuration locale.

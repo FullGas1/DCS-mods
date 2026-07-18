@@ -18,4 +18,6 @@ Extract the ZIP and copy the folder to:
 
 ## Screenshots / Videos
 
+![FG_small_Helipad screenshot](media/FG_small_Helipad_Under_Construction.JPG)
+
 <!-- Add links or images from media/ -->
