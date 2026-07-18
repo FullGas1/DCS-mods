@@ -42,7 +42,7 @@ def render_readme(metadata: dict, first_image: str | None) -> str:
     lines = [f"# {name}", ""]
 
     if first_image:
-        lines += [f"![]({first_image})", ""]
+        lines += [f"![{name} screenshot]({first_image})", ""]
 
     lines += [
         "## Description",

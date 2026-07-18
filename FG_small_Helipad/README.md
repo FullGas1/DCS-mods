@@ -1,5 +1,7 @@
 # FG_small_Helipad
 
+![FG_small_Helipad screenshot](media/FG_small_Helipad.JPG)
+
 ## Description
 
 Small metal helipad for ground placement.
