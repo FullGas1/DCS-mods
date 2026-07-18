@@ -1,0 +1,50 @@
+name: Scaffold mod README
+
+on:
+  push:
+    branches:
+      - develop
+
+permissions:
+  contents: write
+
+jobs:
+  scaffold:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository (with LFS)
+        uses: actions/checkout@v4
+        with:
+          lfs: true
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Scaffold missing READMEs
+        id: scaffold
+        run: |
+          created=0
+          for dir in */; do
+            dir="${dir%/}"
+            zip="$dir/$dir.zip"
+            readme="$dir/README.md"
+            if [ -f "$zip" ] && [ ! -f "$readme" ]; then
+              echo "Scaffolding README for: $dir"
+              python scripts/scaffold_readme.py "$dir"
+              created=$((created + 1))
+            fi
+          done
+          echo "created=$created" >> "$GITHUB_OUTPUT"
+
+      - name: Commit scaffolded READMEs
+        if: steps.scaffold.outputs.created != '0'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add "*/README.md"
+          git commit -m "chore: scaffold README for new mod(s)"
+          git push
