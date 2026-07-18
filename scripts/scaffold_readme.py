@@ -23,17 +23,18 @@ from parse_mod import parse_mod_zip
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png", ".gif", ".webp"}
 
 
-def find_first_image(media_dir: Path) -> str | None:
-    """Return the relative path to the first image in media/, or None."""
+def find_images(media_dir: Path) -> list[str]:
+    """Return sorted list of relative paths to all images in media/."""
     if not media_dir.is_dir():
-        return None
-    for f in sorted(media_dir.iterdir()):
-        if f.suffix.lower() in IMAGE_EXTENSIONS:
-            return f"media/{f.name}"
-    return None
+        return []
+    return [
+        f"media/{f.name}"
+        for f in sorted(media_dir.iterdir())
+        if f.suffix.lower() in IMAGE_EXTENSIONS
+    ]
 
 
-def render_readme(metadata: dict, first_image: str | None) -> str:
+def render_readme(metadata: dict, images: list[str]) -> str:
     """Render the default README template from mod metadata."""
     name = metadata["name"]
     description = metadata["description"] or "<!-- To be completed -->"
@@ -41,8 +42,8 @@ def render_readme(metadata: dict, first_image: str | None) -> str:
 
     lines = [f"# {name}", ""]
 
-    if first_image:
-        lines += [f"![{name} screenshot]({first_image})", ""]
+    if images:
+        lines += [f"![{name} screenshot]({images[0]})", ""]
 
     lines += [
         "## Description",
@@ -61,9 +62,12 @@ def render_readme(metadata: dict, first_image: str | None) -> str:
         "",
         "## Screenshots / Videos",
         "",
-        "<!-- Add links or images from media/ -->",
-        "",
     ]
+
+    for img in images[1:]:
+        lines += [f"![{name} screenshot]({img})", ""]
+
+    lines += ["<!-- Add links or images from media/ -->", ""]
 
     return "\n".join(lines)
 
@@ -84,8 +88,8 @@ def scaffold(mod_folder: Path) -> bool:
         raise FileNotFoundError(f"No ZIP found at {zip_path}")
 
     metadata = parse_mod_zip(str(zip_path))
-    first_image = find_first_image(mod_folder / "media")
-    content = render_readme(metadata, first_image)
+    images = find_images(mod_folder / "media")
+    content = render_readme(metadata, images)
     readme_path.write_text(content, encoding="utf-8")
     return True
 
